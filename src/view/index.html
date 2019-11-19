@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <style>
+      * { margin: 0;  box-sizing: border-box; }
+      .clear{ clear: both;}
+      body { font: 14px 'helvetica neue', Arial; }
+      .container{ padding: 0 15px;}
+      form.chat { background: #000; padding: 5px; position: fixed; bottom: 0; width: 80%; left: 10%; }
+      form.chat input { float:left; border: 0; padding: 10px; width: 75%; margin-right: .5%; }
+      form.chat button {  float: right;width: 20%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      h1{ float: left;}
+      header{ padding: 10px}
+      header form{ float: right}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+    <header>
+      <h1>Simple Chat App</h1>
+      <form>
+      <label>Username: <input type="text" id="un"></label> <button>Save</button>
+      </form>
+      <div class="clear"></div>
+      </header>
+    <ul id="messages"></ul>
+    <form class="chat" action="">
+      <input id="m" autofocus autocomplete="off"> <button>Send</button>
+    </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+  $(function () {
+    var socket = io();
+    var user;
+    $("header form").submit(function(e){
+      e.preventDefault();
+       user=$("#un").value;
+
+    })
+
+    $('form.chat').submit(function(e){
+      e.preventDefault(); // prevents page reloading
+      socket.emit('chat message', $('#m').val());
+      $('#m').val('');
+      return false;
+    });
+    socket.on('chat message', function(msg){
+      $('#messages').append($('<li>').text(user+ ":-> "+ msg));
+    });
+  });
+</script>
+  </body>
+</html>
