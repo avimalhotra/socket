@@ -13,7 +13,12 @@ io.on('connection', function(socket){
   socket.username="avi";
   socket.on('change_username',(data)=>{
     socket.username=data.username;
-  })
+  });
+  socket.on('send-nickname', function(nickname) {
+    socket.nickname = nickname;
+    users.push(socket.nickname);
+    console.log(users);
+});
   
     socket.on('chat message', function(msg){
       io.emit('chat message', msg);

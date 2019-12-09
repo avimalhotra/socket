@@ -17,21 +17,20 @@
       #messages li:nth-child(odd) { background: #eee; }
       h1{ float: left;}
       header{ padding: 10px}
-      header form{ float: right}
+      #name{ border-bottom: 1px solid #333; margin-bottom: 3px;}
     </style>
   </head>
   <body>
     <div class="container">
     <header>
       <h1>Simple Chat App</h1>
-      <form>
-      <label>Username: <input type="text" id="un"></label> <button>Save</button>
-      </form>
+     
       <div class="clear"></div>
       </header>
     <ul id="messages"></ul>
     <form class="chat" action="">
-      <input id="m" autofocus autocomplete="off"> <button>Send</button>
+      <input autofocus type="text" id="name" required placeholder="Name">
+      <input id="m"  autocomplete="off" required placeholder="Message"> <button>Send</button>
     </form>
     </div>
     <script src="/socket.io/socket.io.js"></script>
@@ -39,21 +38,19 @@
 <script>
   $(function () {
     var socket = io();
-    var user;
-    $("header form").submit(function(e){
-      e.preventDefault();
-       user=$("#un").value;
-
-    })
+   
 
     $('form.chat').submit(function(e){
       e.preventDefault(); // prevents page reloading
-      socket.emit('chat message', $('#m').val());
+      var tt=$("#name").val()+ ": "+  $('#m').val();
+      socket.emit('chat message',tt);
+      //socket.emit('send-nickname', nickname);
       $('#m').val('');
       return false;
     });
     socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(user+ ":-> "+ msg));
+      
+      $('#messages').append($('<li>').text( msg));
     });
   });
 </script>
